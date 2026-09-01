@@ -10,8 +10,4 @@
 		<ProjectReference Include="..\GestaoFinancas.Domain\GestaoFinancas.Domain.csproj" />
 		<ProjectReference Include="..\GestaoFinancas.Infrastructure\GestaoFinancas.Infrastructure.csproj" />
 	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Services\" />
-	</ItemGroup>
 </Project>
