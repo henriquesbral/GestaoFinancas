@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace GestaoFinancas.Infrastructure.Data
 {
-    public class AppContext : DbContext
+    public class AppDbContext : DbContext
     {
-        public AppContext(DbContextOptions<AppContext> options) : base(options)
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {            
         }
 
