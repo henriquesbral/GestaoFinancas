@@ -11,5 +11,5 @@ namespace GestaoFinancas.Domain.Interfaces
     {
         Task<Usuario?> ObterPorUsuarioAsync(string usuario);
     }
-}
+
 }

@@ -1,5 +1,7 @@
 ﻿using GestaoFinancas.Domain.Entities;
 using GestaoFinancas.Domain.Interfaces;
+using GestaoFinancas.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +12,14 @@ namespace GestaoFinancas.Infrastructure.Repository
 {
     public class UsuarioRepository : IUsuarioRepository
     {
-        public Task<Usuario?> ObterPorUsuarioAsync(string usuario)
+        private readonly BDUsuarioContext _context;
+        public UsuarioRepository(BDUsuarioContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
+        }
+        public async Task<Usuario?> ObterPorUsuarioAsync(string usuario)
+        {
+            return await _context.Usuario.FirstOrDefaultAsync(x => x.User == usuario);
         }
     }
 }

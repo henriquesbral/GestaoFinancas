@@ -1,7 +1,9 @@
 using GestaoFinancas.Application.Interfaces;
 using GestaoFinancas.Application.Services;
 using GestaoFinancas.Domain.Entities;
+using GestaoFinancas.Domain.Interfaces;
 using GestaoFinancas.Infrastructure.Data;
+using GestaoFinancas.Infrastructure.Repository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,6 +21,7 @@ builder.Services.AddDbContext<BDUsuarioContext>(options =>
     ));
 
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IPasswordHasher<Usuario>, PasswordHasher<Usuario>>();
 
 var app = builder.Build();
