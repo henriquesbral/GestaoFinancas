@@ -15,5 +15,11 @@ namespace GestaoFinancas.Infrastructure.Data
         }
 
         public DbSet<Usuario> Usuario {  get; set; }
+        
+        public DbSet<PerfilUsuario> PerfilUsuario {  get; set; }
+
+        public DbSet<PessoaCadastro> PessoaCadastro {  get; set; }
+
+
     }
 }

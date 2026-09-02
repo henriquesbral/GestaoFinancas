@@ -1,44 +1,31 @@
-﻿using GestaoFinancas.Application.Interfaces;
+﻿using GestaoFinancas.Application.DTOs;
+using GestaoFinancas.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace GestaoFinancas.Controllers
+namespace GestaoFinancas.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class AuthController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class AuthController : Controller
+    private readonly IAuthService _authService;
+
+    public AuthController(IAuthService authService)
     {
-        private readonly IAuthService _authService;
-        public AuthController(IAuthService authService)
+        _authService = authService;
+    }
+
+    [HttpPost("login")]
+    public async Task<IActionResult> Login(string usuario, string senha)
+    {
+        var loginRequest = new LoginRequest()
         {
-            _authService = authService;
-        }
+            Usuario = usuario,
+            Senha = senha
+        };
 
-        public IActionResult Index()
-        {
-            return View();
-        }
+        var usuarioAutenticado = _authService.LoginAsync(loginRequest);
 
-        [HttpPost("Auth")]
-        public IActionResult Autenticar(string usuario, string senha)
-        {
-            var usuarioEnviado = usuario;
-            var senhaEnviado = senha;
-
-            if (usuarioEnviado == "u")
-            {
-                return Ok("Usuario validado com sucesso !");
-            }
-            else
-            {
-                return BadRequest("Erro ao validar usuario");
-            }
-        }
-
-        [HttpGet("GetUsers")]
-        public IActionResult Users() 
-        {
-            return Ok();        
-        }
-
+        return Ok();
     }
 }
