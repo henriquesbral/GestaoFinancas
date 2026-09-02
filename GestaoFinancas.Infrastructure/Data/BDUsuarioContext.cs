@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace GestaoFinancas.Infrastructure.Data
 {
-    public class AppContext : DbContext
+    public class BDUsuarioContext : DbContext
     {
-        public AppContext(DbContextOptions<AppContext> options) : base(options)
-        {            
+        public BDUsuarioContext(DbContextOptions<BDUsuarioContext> options) : base(options)
+        {
         }
 
-        public DbSet<Salario> Salario { get; set; }
+        public DbSet<Usuario> Usuario {  get; set; }
     }
 }

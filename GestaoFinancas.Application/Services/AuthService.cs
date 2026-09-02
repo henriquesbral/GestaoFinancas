@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GestaoFinancas.Application.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,12 +7,11 @@ using System.Threading.Tasks;
 
 namespace GestaoFinancas.Application.Services
 {
-    public class AuthService
+    public class AuthService : IAuthService
     {
-        private readonly AppContext _context;
-        public AuthService(AppContext context)
+        public AuthService()
         {
-            _context = context;
+            
         }
 
         public async Task<bool> IsAuthenticated(string usuario, string senha)

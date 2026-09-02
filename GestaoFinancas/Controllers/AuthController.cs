@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using GestaoFinancas.Application.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 
 namespace GestaoFinancas.Controllers
 {
@@ -6,10 +7,10 @@ namespace GestaoFinancas.Controllers
     [Route("api/[controller]")]
     public class AuthController : Controller
     {
-        private readonly AppContext _context;
-        public AuthController(AppContext context)
+        private readonly IAuthService _authService;
+        public AuthController(IAuthService authService)
         {
-            _context = context;
+            _authService = authService;
         }
 
         public IActionResult Index()
@@ -33,7 +34,7 @@ namespace GestaoFinancas.Controllers
             }
         }
 
-        [HttpGet("ListarUsuarios")]
+        [HttpGet("GetUsers")]
         public IActionResult Users() 
         {
             return Ok();        
