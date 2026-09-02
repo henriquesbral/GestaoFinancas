@@ -1,4 +1,4 @@
-using GestaoFinancas.Application.Interfaces.IServices;
+using GestaoFinancas.Application.Interfaces;
 using GestaoFinancas.Application.Services;
 using GestaoFinancas.Domain.Entities;
 using GestaoFinancas.Infrastructure.Data;

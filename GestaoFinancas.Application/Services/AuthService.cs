@@ -1,4 +1,5 @@
-﻿using GestaoFinancas.Application.Interfaces.IServices;
+﻿using GestaoFinancas.Application.DTOs;
+using GestaoFinancas.Application.Interfaces;
 using GestaoFinancas.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -17,18 +18,9 @@ namespace GestaoFinancas.Application.Services
             _passwordHasher = passwordHasher;
         }
 
-        public async Task<bool> IsAuthenticated(string usuario, string senha)
+        public Task<LoginResponse?> LoginAsync(LoginRequest request)
         {
-            bool autenticado = false;
-
-            autenticado = await AutenticarUsuario();
-
-            return autenticado;
+            throw new NotImplementedException();
         }
-
-        private async Task<bool> AutenticarUsuario()
-        {
-            return false;
-        } 
     }
 }

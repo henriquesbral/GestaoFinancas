@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GestaoFinancas.Application.Interfaces.IServices
+namespace GestaoFinancas.Application.Interfaces
 {
     public interface IAuthService
     {

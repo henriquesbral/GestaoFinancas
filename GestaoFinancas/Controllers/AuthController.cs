@@ -1,4 +1,4 @@
-﻿using GestaoFinancas.Application.Interfaces.IServices;
+﻿using GestaoFinancas.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GestaoFinancas.Controllers
