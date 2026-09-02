@@ -1,4 +1,6 @@
-﻿using GestaoFinancas.Application.Interfaces;
+﻿using GestaoFinancas.Application.Interfaces.IServices;
+using GestaoFinancas.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +11,10 @@ namespace GestaoFinancas.Application.Services
 {
     public class AuthService : IAuthService
     {
-        public AuthService()
+        private readonly IPasswordHasher<Usuario> _passwordHasher;
+        public AuthService(IPasswordHasher<Usuario> passwordHasher)
         {
-            
+            _passwordHasher = passwordHasher;
         }
 
         public async Task<bool> IsAuthenticated(string usuario, string senha)

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GestaoFinancas.Application.Interfaces
+namespace GestaoFinancas.Application.Interfaces.IRepositorys
 {
-    public interface IAuthService
+    public interface IUsuarioRepository
     {
     }
 }
