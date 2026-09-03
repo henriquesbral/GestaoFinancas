@@ -24,8 +24,10 @@ public class AuthController : ControllerBase
             Senha = senha
         };
 
-        var usuarioAutenticado = _authService.LoginAsync(loginRequest);
+        var usuarioAutenticado = await _authService.LoginAsync(loginRequest);
 
-        return Ok();
+        var usu = usuarioAutenticado;
+
+        return Ok(usu);
     }
 }
