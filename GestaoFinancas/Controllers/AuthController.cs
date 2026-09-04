@@ -18,16 +18,24 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login(string usuario, string senha)
     {
-        var loginRequest = new LoginRequest()
+        try
         {
-            Usuario = usuario,
-            Senha = senha
-        };
+            var loginRequest = new LoginRequest()
+            {
+                Usuario = usuario,
+                Senha = senha
+            };
 
-        var usuarioAutenticado = await _authService.LoginAsync(loginRequest);
+            var usuarioAutenticado = await _authService.LoginAsync(loginRequest);
 
-        var usu = usuarioAutenticado;
+            var usu = usuarioAutenticado;
 
-        return Ok(usu);
+            return Ok(usu);
+        }
+        catch (Exception ex) 
+        {
+            Console.WriteLine(ex.ToString());
+            return BadRequest(500);
+        }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using GestaoFinancas.Domain.Entities;
+using GestaoFinancas.Domain.Enums;
 using GestaoFinancas.Domain.Interfaces;
 using GestaoFinancas.Infrastructure.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -15,36 +17,28 @@ namespace GestaoFinancas.Infrastructure.Repository
     public class UsuarioRepository : IUsuarioRepository
     {
         private readonly BDUsuarioContext _context;
+        private readonly IPasswordHasher<Usuario> _passwordHasher;
         public UsuarioRepository(BDUsuarioContext context)
         {
             _context = context;
         }
+
         public async Task<Usuario?> ObterPorUsuarioAsync(string usuario)
         {
-            try
-            {
-                var connectionString = _context.Database.GetDbConnection().ConnectionString;
+            return await _context.Usuario.FirstOrDefaultAsync(x => x.User == usuario);
+        }
 
-                await using var connection = new SqlConnection(connectionString);
-                await connection.OpenAsync(CancellationToken.None);
-
-                Console.WriteLine($"Conectado a: {connection.DataSource}");
-
-                return await _context.Usuario
-                    .FirstOrDefaultAsync(x => x.User == usuario);
-            }
-            catch (SqlException ex)
+        public async Task AdicionarUsuarioAsync(Usuario usuario)
+        {
+            var newUser = new Usuario()
             {
-                Console.WriteLine($"SQL {ex.Number}: {ex.Message}");
-                Console.WriteLine(ex.ToString());
-                throw;
-            }
-            catch (OperationCanceledException ex)
-            {
-                Console.WriteLine($"Abertura da conexão cancelada: {ex.Message}");
-                Console.WriteLine(ex.ToString());
-                throw;
-            }
+                User = usuario.User,
+                PasswordHash = _passwordHasher.HashPassword(usuario, usuario.PasswordHash),
+                IdPerfil = (int)PerfilUsuarioEnum.Usuario
+            };
+
+            await _context.Usuario.AddAsync(newUser);
+            await _context.SaveChangesAsync();
         }
     }
 }

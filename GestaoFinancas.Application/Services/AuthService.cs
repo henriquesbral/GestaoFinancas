@@ -56,8 +56,7 @@ namespace GestaoFinancas.Application.Services
             return resultado != PasswordVerificationResult.Failed;
         }
 
-        private Task<LoginResponse> CriarRespostaAutenticacaoAsync(
-            Usuario usuario)
+        private Task<LoginResponse> CriarRespostaAutenticacaoAsync(Usuario usuario)
         {
             // JWT entrará aqui posteriormente.
 

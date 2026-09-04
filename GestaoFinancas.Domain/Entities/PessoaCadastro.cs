@@ -16,6 +16,8 @@ namespace GestaoFinancas.Domain.Entities
 
         public string Email { get; set; }
 
+        public string CPF { get; set; }
+
         public bool Ativo { get; set; }
 
         public DateTime DataCadastro { get; set; }

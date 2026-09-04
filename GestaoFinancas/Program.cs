@@ -32,8 +32,10 @@ builder.Services.AddDbContext<BDUsuarioContext>(options =>
 
 // Repository
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<IPessoaCadastroRepository, PessoaCadastroRepository>();
 
 // Auth Service
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
 // Password Hasher

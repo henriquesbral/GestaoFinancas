@@ -7,11 +7,10 @@ using System.Threading.Tasks;
 
 namespace GestaoFinancas.Domain.Interfaces
 {
-    public interface IUsuarioRepository
+    public interface IPessoaCadastroRepository
     {
-        Task<Usuario?> ObterPorUsuarioAsync(string usuario);
+        Task<PessoaCadastro?> ObterPessoaCadastroAsync(string email);
 
-        Task AdicionarUsuarioAsync(Usuario usuario);
+        Task<PessoaCadastro> AdicionarPessoaCadastroAsync(PessoaCadastro pessoa);
     }
-
 }
