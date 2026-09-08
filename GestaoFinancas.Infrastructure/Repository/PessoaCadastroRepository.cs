@@ -29,13 +29,15 @@ namespace GestaoFinancas.Infrastructure.Repository
             {
                 NomePessoa = pessoa.NomePessoa,
                 Email = pessoa.Email,
-                CPF = pessoa.CPF
+                CPF = pessoa.CPF,
+                Ativo = pessoa.Ativo,
+                DataCadastro = pessoa.DataCadastro,
             };
 
-            await _context.AddAsync(newPessoa);
-            await _context.SaveChangesAsync();
+            _context.PessoaCadastro.Add(newPessoa);
+            _context.SaveChanges();
 
-            return newPessoa;
+            return _context.PessoaCadastro.FirstOrDefault(p => p.CPF == newPessoa.CPF);
         }
     }
 }

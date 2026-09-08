@@ -16,13 +16,13 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login(string usuario, string senha)
+    public async Task<IActionResult> Login(string emailUsuario, string senha)
     {
         try
         {
             var loginRequest = new LoginRequest()
             {
-                Usuario = usuario,
+                Email = emailUsuario,
                 Senha = senha
             };
 

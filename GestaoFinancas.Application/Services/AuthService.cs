@@ -27,7 +27,7 @@ namespace GestaoFinancas.Application.Services
         #region Métodos Publicos
         public async Task<LoginResponse?> LoginAsync(LoginRequest request)
         {
-            var usuario = await ObterUsuarioAsync(request.Usuario);
+            var usuario = await ObterUsuarioAsync(request.Email);
 
             if (usuario is null)
                 return null;
@@ -40,17 +40,16 @@ namespace GestaoFinancas.Application.Services
         #endregion
 
         #region Métodos Privados
-        private async Task<Usuario?> ObterUsuarioAsync(string usuario)
+        private async Task<Usuario?> ObterUsuarioAsync(string emailUsuario)
         {
-            return await _usuarioRepository
-                .ObterPorUsuarioAsync(usuario);
+            return await _usuarioRepository.ObterPorUsuarioAsync(emailUsuario);
         }
 
         private bool ValidarSenha(Usuario usuario, string senha)
         {
             var resultado = _passwordHasher.VerifyHashedPassword(
                 usuario,
-                usuario.PasswordHash,
+                usuario.SenhaHash,
                 senha);
 
             return resultado != PasswordVerificationResult.Failed;

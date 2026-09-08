@@ -18,27 +18,34 @@ namespace GestaoFinancas.Infrastructure.Repository
     {
         private readonly BDUsuarioContext _context;
         private readonly IPasswordHasher<Usuario> _passwordHasher;
-        public UsuarioRepository(BDUsuarioContext context)
+        public UsuarioRepository(BDUsuarioContext context, IPasswordHasher<Usuario> passwordHasher)
         {
             _context = context;
+            _passwordHasher = passwordHasher;
         }
 
-        public async Task<Usuario?> ObterPorUsuarioAsync(string usuario)
+        public async Task<Usuario?> ObterPorUsuarioAsync(string emailUsuario)
         {
-            return await _context.Usuario.FirstOrDefaultAsync(x => x.User == usuario);
+            return await _context.Usuario.FirstOrDefaultAsync(x => x.Email == emailUsuario);
         }
 
-        public async Task AdicionarUsuarioAsync(Usuario usuario)
+        public async Task<Usuario> AdicionarUsuarioAsync(Usuario usuario)
         {
             var newUser = new Usuario()
             {
-                User = usuario.User,
-                PasswordHash = _passwordHasher.HashPassword(usuario, usuario.PasswordHash),
-                IdPerfil = (int)PerfilUsuarioEnum.Usuario
+                Email = usuario.Email,
+                Username = usuario.Username,
+                SenhaHash = _passwordHasher.HashPassword(usuario, usuario.SenhaHash),
+                IdPerfil = usuario.IdPerfil,
+                IdPessoaCadastro = usuario.IdPessoaCadastro,
+                Ativo = usuario.Ativo,
+                DataCadastro = usuario.DataCadastro
             };
 
-            await _context.Usuario.AddAsync(newUser);
-            await _context.SaveChangesAsync();
+            _context.Usuario.Add(newUser);
+            _context.SaveChanges();
+
+            return _context.Usuario.FirstOrDefault(u => u.Email == newUser.Email);
         }
     }
 }

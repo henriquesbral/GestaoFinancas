@@ -36,7 +36,7 @@ builder.Services.AddScoped<IPessoaCadastroRepository, PessoaCadastroRepository>(
 
 // Auth Service
 builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ICadastroService, CadastroService>();
 
 // Password Hasher
 builder.Services.AddScoped<IPasswordHasher<Usuario>, PasswordHasher<Usuario>>();

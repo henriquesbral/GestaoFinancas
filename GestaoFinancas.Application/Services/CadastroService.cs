@@ -1,6 +1,7 @@
 ﻿using GestaoFinancas.Application.DTOs;
 using GestaoFinancas.Application.Interfaces;
 using GestaoFinancas.Domain.Entities;
+using GestaoFinancas.Domain.Enums;
 using GestaoFinancas.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -24,29 +25,38 @@ namespace GestaoFinancas.Application.Services
         }
         public async Task<CadastroResponse?> CadastroAsync(CadastroRequest request)
         {
-            var novoUsuario = new PessoaCadastro()
+            var novaPessoa = new PessoaCadastro()
             {
                 NomePessoa = request.Nome,
-                CPF = request.CPF,
-                Email = request.Email
-
+                CPF = request.CPF.Replace(" ","").Replace(".", "").Replace("-", ""),
+                Email = request.Email,
+                Ativo = true,
+                DataCadastro = DateTime.Now
             };
 
-            var salvarNovoUsuario = _PessoaCadastroRepository.AdicionarPessoaCadastroAsync(novoUsuario);
+            var salvarNovaPessoa = _PessoaCadastroRepository.AdicionarPessoaCadastroAsync(novaPessoa);
 
-            if (salvarNovoUsuario is not null && salvarNovoUsuario.Id != 0)
+            if (salvarNovaPessoa is not null && salvarNovaPessoa.Id != 0)
             {
+                var novoUsername = Usuario.GerarUsername(novaPessoa.NomePessoa);
                 var usuario = new Usuario()
                 {
-                    User = "carlos.sobral",
-                    PasswordHash = "*"
+                    Email = novaPessoa.Email,
+                    Username = novoUsername,
+                    SenhaHash = "Teste",
+                    IdPerfil = (int)PerfilUsuarioEnum.Usuario,
+                    IdPessoaCadastro = salvarNovaPessoa.Result.IdPessoaCadastro,
+                    Ativo = true,
+                    DataCadastro = DateTime.Now
                 };
-                var salvar = _usuarioRepository.AdicionarUsuarioAsync(usuario);
-                return new CadastroResponse()
-                {
-                    Usuario = usuario.User,
-                    Senha = RandomNumberGenerator.GetString(caracteresPermitidos, 10)
-                };
+
+                var novoUsuario = _usuarioRepository.AdicionarUsuarioAsync(usuario);
+
+                var retorno = new CadastroResponse();
+                retorno.Usuario = novoUsuario.Result.Username;
+                retorno.Senha = usuario.SenhaHash;
+
+                return retorno;
             }
             else
             {

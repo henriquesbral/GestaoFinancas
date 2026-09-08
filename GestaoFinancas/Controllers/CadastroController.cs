@@ -23,6 +23,13 @@ namespace GestaoFinancas.Controllers
                 return ValidationProblem(ModelState);
             }
 
+            var cpfInformado = newUser.CPF.Replace(" ", "").Replace(".", "").Replace("-", "");
+
+            if (cpfInformado.Length > 11)
+            {
+                return BadRequest("CPF informado é inválido");
+            }
+
             var CadastroedUser = await _cadastroService.CadastroAsync(newUser);
 
             return CreatedAtAction(nameof(CadastroNewUser), new { Usuario = CadastroedUser.Usuario }, CadastroedUser);
