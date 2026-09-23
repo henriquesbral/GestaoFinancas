@@ -8,7 +8,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading.Tasks;       
 
 namespace GestaoFinancas.Application.Services
 {
@@ -24,7 +24,7 @@ namespace GestaoFinancas.Application.Services
             var chave = _configuration["Jwt:Key"];
             var issuer = _configuration["Jwt:Issuer"];
             var audience = _configuration["Jwt:Audience"];
-            var expirationMinutes = int.Parse(_configuration.GetSection("JwtSettings:ExpireMinutes").Value);
+            var expirationMinutes = _configuration.GetValue<int>("Jwt:ExpirationMinutes");
             
             if (string.IsNullOrWhiteSpace(chave))
                 throw new InvalidOperationException("Chave JWT não configurada.");

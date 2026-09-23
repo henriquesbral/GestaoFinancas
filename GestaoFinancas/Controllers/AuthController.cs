@@ -35,7 +35,7 @@ public class AuthController : ControllerBase
         catch (Exception ex) 
         {
             Console.WriteLine(ex.ToString());
-            return BadRequest(500);
+            return StatusCode(500,   "Ocorreu um erro interno no servidor");
         }
     }
 }

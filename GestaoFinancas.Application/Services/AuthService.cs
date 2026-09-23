@@ -15,13 +15,16 @@ namespace GestaoFinancas.Application.Services
     {
         private readonly IUsuarioRepository _usuarioRepository;
         private readonly IPasswordHasher<Usuario> _passwordHasher;
+        private readonly IJwtService _jwtService;
 
         public AuthService(
             IUsuarioRepository usuarioRepository,
-            IPasswordHasher<Usuario> passwordHasher)
+            IPasswordHasher<Usuario> passwordHasher,
+            IJwtService jwtService)
         {
             _usuarioRepository = usuarioRepository;
             _passwordHasher = passwordHasher;
+            _jwtService = jwtService;
         }
 
         #region Métodos Publicos
@@ -35,7 +38,7 @@ namespace GestaoFinancas.Application.Services
             if (!ValidarSenha(usuario, request.Senha))
                 return null;
 
-            return await CriarRespostaAutenticacaoAsync(usuario);
+            return CriarRespostaAutenticacao(usuario);
         }
         #endregion
 
@@ -55,11 +58,15 @@ namespace GestaoFinancas.Application.Services
             return resultado != PasswordVerificationResult.Failed;
         }
 
-        private Task<LoginResponse> CriarRespostaAutenticacaoAsync(Usuario usuario)
+        private LoginResponse CriarRespostaAutenticacao(Usuario usuario)
         {
-            // JWT entrará aqui posteriormente.
+            var resultadoJwt = _jwtService.GerarToken(usuario);
 
-            return Task.FromResult(new LoginResponse());
+            return new LoginResponse
+            {
+                Token = resultadoJwt.Token,
+                ExpiraEm = resultadoJwt.ExpiraEm
+            };
         }
         #endregion
     }
