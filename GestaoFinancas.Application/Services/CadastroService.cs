@@ -50,10 +50,10 @@ namespace GestaoFinancas.Application.Services
                     DataCadastro = DateTime.Now
                 };
 
-                var novoUsuario = _usuarioRepository.AdicionarUsuarioAsync(usuario);
+                var novoUsuario = await _usuarioRepository.AdicionarUsuarioAsync(usuario);
 
                 var retorno = new CadastroResponse();
-                retorno.Usuario = novoUsuario.Result.Username;
+                retorno.Usuario = novoUsuario.Username;
                 retorno.Senha = usuario.SenhaHash;
 
                 return retorno;
