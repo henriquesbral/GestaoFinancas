@@ -36,7 +36,7 @@ namespace GestaoFinancas.Application.Services
 
             var salvarNovaPessoa = _PessoaCadastroRepository.AdicionarPessoaCadastroAsync(novaPessoa);
 
-            if (salvarNovaPessoa is not null && salvarNovaPessoa.Id != 0)
+            if (salvarNovaPessoa is not null && salvarNovaPessoa.Result.IdPessoaCadastro != 0)
             {
                 var novoUsername = Usuario.GerarUsername(novaPessoa.NomePessoa);
                 var usuario = new Usuario()
