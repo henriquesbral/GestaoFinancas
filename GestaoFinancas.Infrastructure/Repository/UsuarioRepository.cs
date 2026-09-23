@@ -1,6 +1,8 @@
 ﻿using GestaoFinancas.Domain.Entities;
+using GestaoFinancas.Domain.Enums;
 using GestaoFinancas.Domain.Interfaces;
 using GestaoFinancas.Infrastructure.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -15,36 +17,35 @@ namespace GestaoFinancas.Infrastructure.Repository
     public class UsuarioRepository : IUsuarioRepository
     {
         private readonly BDUsuarioContext _context;
-        public UsuarioRepository(BDUsuarioContext context)
+        private readonly IPasswordHasher<Usuario> _passwordHasher;
+        public UsuarioRepository(BDUsuarioContext context, IPasswordHasher<Usuario> passwordHasher)
         {
             _context = context;
+            _passwordHasher = passwordHasher;
         }
-        public async Task<Usuario?> ObterPorUsuarioAsync(string usuario)
+
+        public async Task<Usuario?> ObterPorUsuarioAsync(string emailUsuario)
         {
-            try
-            {
-                var connectionString = _context.Database.GetDbConnection().ConnectionString;
+            return await _context.Usuario.FirstOrDefaultAsync(x => x.Email == emailUsuario);
+        }
 
-                await using var connection = new SqlConnection(connectionString);
-                await connection.OpenAsync(CancellationToken.None);
-
-                Console.WriteLine($"Conectado a: {connection.DataSource}");
-
-                return await _context.Usuario
-                    .FirstOrDefaultAsync(x => x.User == usuario);
-            }
-            catch (SqlException ex)
+        public async Task<Usuario> AdicionarUsuarioAsync(Usuario usuario)
+        {
+            var newUser = new Usuario()
             {
-                Console.WriteLine($"SQL {ex.Number}: {ex.Message}");
-                Console.WriteLine(ex.ToString());
-                throw;
-            }
-            catch (OperationCanceledException ex)
-            {
-                Console.WriteLine($"Abertura da conexão cancelada: {ex.Message}");
-                Console.WriteLine(ex.ToString());
-                throw;
-            }
+                Email = usuario.Email,
+                Username = usuario.Username,
+                SenhaHash = _passwordHasher.HashPassword(usuario, usuario.SenhaHash),
+                IdPerfil = usuario.IdPerfil,
+                IdPessoaCadastro = usuario.IdPessoaCadastro,
+                Ativo = usuario.Ativo,
+                DataCadastro = usuario.DataCadastro
+            };
+
+            _context.Usuario.Add(newUser);
+            _context.SaveChanges();
+
+            return _context.Usuario.FirstOrDefault(u => u.Email == newUser.Email);
         }
     }
 }

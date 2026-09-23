@@ -15,19 +15,22 @@ namespace GestaoFinancas.Application.Services
     {
         private readonly IUsuarioRepository _usuarioRepository;
         private readonly IPasswordHasher<Usuario> _passwordHasher;
+        private readonly IJwtService _jwtService;
 
         public AuthService(
             IUsuarioRepository usuarioRepository,
-            IPasswordHasher<Usuario> passwordHasher)
+            IPasswordHasher<Usuario> passwordHasher,
+            IJwtService jwtService)
         {
             _usuarioRepository = usuarioRepository;
             _passwordHasher = passwordHasher;
+            _jwtService = jwtService;
         }
 
         #region Métodos Publicos
         public async Task<LoginResponse?> LoginAsync(LoginRequest request)
         {
-            var usuario = await ObterUsuarioAsync(request.Usuario);
+            var usuario = await ObterUsuarioAsync(request.Email);
 
             if (usuario is null)
                 return null;
@@ -35,33 +38,35 @@ namespace GestaoFinancas.Application.Services
             if (!ValidarSenha(usuario, request.Senha))
                 return null;
 
-            return await CriarRespostaAutenticacaoAsync(usuario);
+            return CriarRespostaAutenticacao(usuario);
         }
         #endregion
 
         #region Métodos Privados
-        private async Task<Usuario?> ObterUsuarioAsync(string usuario)
+        private async Task<Usuario?> ObterUsuarioAsync(string emailUsuario)
         {
-            return await _usuarioRepository
-                .ObterPorUsuarioAsync(usuario);
+            return await _usuarioRepository.ObterPorUsuarioAsync(emailUsuario);
         }
 
         private bool ValidarSenha(Usuario usuario, string senha)
         {
             var resultado = _passwordHasher.VerifyHashedPassword(
                 usuario,
-                usuario.PasswordHash,
+                usuario.SenhaHash,
                 senha);
 
             return resultado != PasswordVerificationResult.Failed;
         }
 
-        private Task<LoginResponse> CriarRespostaAutenticacaoAsync(
-            Usuario usuario)
+        private LoginResponse CriarRespostaAutenticacao(Usuario usuario)
         {
-            // JWT entrará aqui posteriormente.
+            var resultadoJwt = _jwtService.GerarToken(usuario);
 
-            return Task.FromResult(new LoginResponse());
+            return new LoginResponse
+            {
+                Token = resultadoJwt.Token,
+                ExpiraEm = resultadoJwt.ExpiraEm
+            };
         }
         #endregion
     }
